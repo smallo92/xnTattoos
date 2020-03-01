@@ -1,6 +1,6 @@
 **xnTattoos**
 
-ESX Tattoo Shop using all the available GTA Online tattoos with correct names and configured pricing
+ESX Tattoo Shop using all the available GTA Online tattoos with correct names and configured pricing. You can select parts of the body and apply multiple tattoos to each area, change the opacity of the tattoos, rotate the camera to see them from multiple angles and even remove tattoos. 
 
 **Installation**
 
