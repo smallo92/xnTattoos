@@ -160,7 +160,7 @@ function ButtonPress()
 end
 
 function IsMenuOpen()
-	return (JayMenu.IsMenuOpened('tattoo') or string.find(tostring(JayMenu.CurrentMenu() or ""), "ZONE_"))
+	return (JayMenu.IsMenuOpened('tattoo') or string.find(tostring(JayMenu.CurrentMenu() or ""), "ZONE_"))	
 end
 
 function BuyTattoo(collection, name, label, price)
@@ -204,10 +204,11 @@ Citizen.CreateThread(function()
 
     while true do 
         Citizen.Wait(0)
-		
+		local CanSleep = true
 		if not IsMenuOpen() then
 			for _,interiorId in ipairs(Config.interiorIds) do
 				if GetInteriorFromEntity(PlayerPedId()) == interiorId then
+					CanSleep = false
 					if not IsPedInAnyVehicle(PlayerPedId(), false) then
 						CreateScale("OpenShop")
 						DrawScaleformMovieFullscreen(scaleType, 255, 255, 255, 255, 0)
@@ -221,9 +222,11 @@ Citizen.CreateThread(function()
 
 		if IsMenuOpen() then
 			DisableAllControlActions(0)
+			CanSleep = false
 		end
 		
         if JayMenu.IsMenuOpened('tattoo') then
+			CanSleep = false
             for k, v in ipairs(Config.TattooCats) do
 				JayMenu.MenuButton(v[2], v[1])
 			end
@@ -247,6 +250,7 @@ Citizen.CreateThread(function()
         end
 		for k, v in ipairs(Config.TattooCats) do
 			if JayMenu.IsMenuOpened(v[1]) then
+				CanSleep = false
 				if not DoesCamExist(cam) then
 					cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
 					SetCamActive(cam, true)
@@ -338,6 +342,9 @@ Citizen.CreateThread(function()
 				end
 				JayMenu.Display()
 			end
+		end
+		if CanSleep then
+			Citizen.Wait(3000)
 		end
     end
 end)
