@@ -14,7 +14,7 @@ The prices of the tattoos are being divided by 20 otherwise they would all be ma
 
 All tattoo names are stored text labels inside the game, so if you plan to add custom tattoos make sure it has a matching label being created with `AddTextEntry()`
 
-Categories are defined by the `Zone` entry in the json and the DLC they come from is defined by `Collection` although it isn't used
+Categories are defined by the `Zone` entry in the json and the DLC they come from is defined by `Collection` which is used to load the correct textures
 
 **Dependencies**
 
