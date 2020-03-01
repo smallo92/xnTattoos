@@ -18,6 +18,10 @@ Categories are defined by the `Zone` entry in the json and the DLC they come fro
 Obviously this needs `ESX` and `mysql-async`
 Another dependency is `JayMenu` which is currently included in this release until it is actually fully released by [Jaymo](https://github.com/jaymo1011)
 
+**Known Issues**
+
+Sometime the camera goes into the wrong spot. Leave the menu and re-enter it to fix that.
+
 [Video Demo](https://spandauballet.gold/i/Y1ouh2m.mp4)
 
 ![Inside Menu](https://fuckingyourmum.com/i/na8Dax.jpg)
