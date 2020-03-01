@@ -4,6 +4,8 @@ ESX Tattoo Shop using all the available GTA Online tattoos with correct names an
 
 **Installation**
 
+Add tattoos.sql to your database if you don't already have a tattoos field in your `users` table (or update the `VARCHAR(255)` to `LONGTEXT` to prevent errors of having too many tattoos
+
 Copy xnTattoos to your resources folder and add `start xnTattoos` to your server.cfg
 
 **Customisation**
