@@ -25,6 +25,8 @@ Another dependency is `JayMenu` which is currently included in this release unti
 
 Sometime the camera goes into the wrong spot. Leave the menu and re-enter it to fix that.
 
+Head Blend Data is memed on OneSync so the tattoos try and reapply themselves every 5 minutes to counter that (maybe)
+
 [Video Demo](https://spandauballet.gold/i/Y1ouh2m.mp4)
 
 ![Inside Menu](https://fuckingyourmum.com/i/na8Dax.jpg)
