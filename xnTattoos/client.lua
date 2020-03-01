@@ -148,7 +148,7 @@ end
 function CloseTattooShop()
 	ClearAdditionalText(9, 1)
 	FreezeEntityPosition(PlayerPedId(), false)
-	EnableAllControlActions(2)
+	EnableAllControlActions(0)
 	back = 1
 	opacity = 1
 	ResetSkin()
