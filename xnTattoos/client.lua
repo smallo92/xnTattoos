@@ -160,7 +160,7 @@ function ButtonPress()
 end
 
 function IsMenuOpen()
-	return (JayMenu.IsMenuOpened('tattoo') or string.find(tostring(JayMenu.CurrentMenu() or ""), "ZONE_"))
+	return (JayMenu.IsMenuOpened('tattoo') or string.find(tostring(JayMenu.CurrentMenu() or ""), "ZONE_"))	
 end
 
 function BuyTattoo(collection, name, label, price)
@@ -222,9 +222,11 @@ Citizen.CreateThread(function()
 
 		if IsMenuOpen() then
 			DisableAllControlActions(0)
+			CanSleep = false
 		end
 		
         if JayMenu.IsMenuOpened('tattoo') then
+			CanSleep = false
             for k, v in ipairs(Config.TattooCats) do
 				JayMenu.MenuButton(v[2], v[1])
 			end
@@ -248,6 +250,7 @@ Citizen.CreateThread(function()
         end
 		for k, v in ipairs(Config.TattooCats) do
 			if JayMenu.IsMenuOpened(v[1]) then
+				CanSleep = false
 				if not DoesCamExist(cam) then
 					cam = CreateCam("DEFAULT_SCRIPTED_CAMERA", 1)
 					SetCamActive(cam, true)
