@@ -204,10 +204,11 @@ Citizen.CreateThread(function()
 
     while true do 
         Citizen.Wait(0)
-		
+		local CanSleep = true
 		if not IsMenuOpen() then
 			for _,interiorId in ipairs(Config.interiorIds) do
 				if GetInteriorFromEntity(PlayerPedId()) == interiorId then
+					CanSleep = false
 					if not IsPedInAnyVehicle(PlayerPedId(), false) then
 						CreateScale("OpenShop")
 						DrawScaleformMovieFullscreen(scaleType, 255, 255, 255, 255, 0)
@@ -338,6 +339,9 @@ Citizen.CreateThread(function()
 				end
 				JayMenu.Display()
 			end
+		end
+		if CanSleep then
+			Citizen.Wait(3000)
 		end
     end
 end)
