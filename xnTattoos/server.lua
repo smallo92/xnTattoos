@@ -1,12 +1,12 @@
-ESX = nil
-TriggerEvent('esx:getSharedObject', function(obj) ESX = obj end)
+QBCore = nil
+TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
 
-ESX.RegisterServerCallback('SmallTattoos:GetPlayerTattoos', function(source, cb)
-	local xPlayer = ESX.GetPlayerFromId(source)
+QBCore.Functions.CreateCallback('SmallTattoos:GetPlayerTattoos', function(source, cb)
+	local xPlayer = QBCore.Functions.GetPlayer(source)
 
 	if xPlayer then
-		MySQL.Async.fetchAll('SELECT tattoos FROM users WHERE identifier = @identifier', {
-			['@identifier'] = xPlayer.identifier
+		exports['ghmattimysql']:execute('SELECT tattoos FROM playerskins WHERE citizenid = @identifier', {
+			['@identifier'] = xPlayer.PlayerData.citizenid
 		}, function(result)
 			if result[1].tattoos then
 				cb(json.decode(result[1].tattoos))
@@ -19,32 +19,31 @@ ESX.RegisterServerCallback('SmallTattoos:GetPlayerTattoos', function(source, cb)
 	end
 end)
 
-ESX.RegisterServerCallback('SmallTattoos:PurchaseTattoo', function(source, cb, tattooList, price, tattoo, tattooName)
-	local xPlayer = ESX.GetPlayerFromId(source)
+QBCore.Functions.CreateCallback('SmallTattoos:PurchaseTattoo', function(source, cb, tattooList, price, tattoo, tattooName)
+	local xPlayer = QBCore.Functions.GetPlayer(source)
 
-	if xPlayer.getMoney() >= price then
-		xPlayer.removeMoney(price)
+	if xPlayer.PlayerData.money['cash'] >= price then
+		xPlayer.Functions.RemoveMoney('cash', price)
 		table.insert(tattooList, tattoo)
 
-		MySQL.Async.execute('UPDATE users SET tattoos = @tattoos WHERE identifier = @identifier', {
+		exports['ghmattimysql']:execute('UPDATE playerskins SET tattoos = @tattoos WHERE citizenid = @identifier', {
 			['@tattoos'] = json.encode(tattooList),
-			['@identifier'] = xPlayer.identifier
+			['@identifier'] = xPlayer.PlayerData.citizenid
 		})
-
-		TriggerClientEvent('esx:showNotification', source, "You have bought the ~y~" .. tattooName .. "~s~ tattoo for ~g~$" .. price)
+		TriggerClientEvent('QBCore:Notify', source, 'Purchased The '..tattooName.. ' Tattoo For $'..price, 'success')
 		cb(true)
 	else
-		TriggerClientEvent('esx:showNotification', source, "You do not have enough money for this tattoo")
+		TriggerClientEvent('QBCore:Notify', source, 'Not Enough Money', 'error')
 		cb(false)
 	end
 end)
 
 RegisterServerEvent('SmallTattoos:RemoveTattoo')
 AddEventHandler('SmallTattoos:RemoveTattoo', function (tattooList)
-	local xPlayer = ESX.GetPlayerFromId(source)
+	local xPlayer = QBCore.Functions.GetPlayer(source)
 
-	MySQL.Async.execute('UPDATE users SET tattoos = @tattoos WHERE identifier = @identifier', {
+	exports['ghmattimysql']:execute('UPDATE playerskins SET tattoos = @tattoos WHERE citizenid = @identifier', {
 		['@tattoos'] = json.encode(tattooList),
-		['@identifier'] = xPlayer.identifier
+		['@identifier'] = xPlayer.PlayerData.citizenid
 	})
 end)

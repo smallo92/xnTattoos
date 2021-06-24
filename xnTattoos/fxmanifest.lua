@@ -1,5 +1,5 @@
-fx_version 'adamant'
-games { 'gta5' }
+fx_version 'cerulean'
+game 'gta5'
 
 client_scripts {
 	'jaymenu.lua',
@@ -8,7 +8,6 @@ client_scripts {
 }
 
 server_scripts {
-	'@mysql-async/lib/MySQL.lua',
 	'server.lua'
 }
 
