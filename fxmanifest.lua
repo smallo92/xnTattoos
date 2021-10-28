@@ -7,8 +7,6 @@ client_scripts {
 	'client.lua'
 }
 
-server_scripts {
-	'server.lua'
-}
+server_script 'server.lua'
 
 file 'AllTattoos.json'

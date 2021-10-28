@@ -1,12 +1,11 @@
-QBCore = nil
-TriggerEvent('QBCore:GetObject', function(obj) QBCore = obj end)
+local QBCore = exports['qb-core']:GetCoreObject()
 
 QBCore.Functions.CreateCallback('SmallTattoos:GetPlayerTattoos', function(source, cb)
-	local xPlayer = QBCore.Functions.GetPlayer(source)
-
+	local src = source
+	local xPlayer = QBCore.Functions.GetPlayer(src)
 	if xPlayer then
-		exports['ghmattimysql']:execute('SELECT tattoos FROM playerskins WHERE citizenid = @identifier', {
-			['@identifier'] = xPlayer.PlayerData.citizenid
+		exports.oxmysql:execute('SELECT tattoos FROM players WHERE citizenid = ?', {
+			xPlayer.PlayerData.citizenid
 		}, function(result)
 			if result[1].tattoos then
 				cb(json.decode(result[1].tattoos))
@@ -20,20 +19,19 @@ QBCore.Functions.CreateCallback('SmallTattoos:GetPlayerTattoos', function(source
 end)
 
 QBCore.Functions.CreateCallback('SmallTattoos:PurchaseTattoo', function(source, cb, tattooList, price, tattoo, tattooName)
-	local xPlayer = QBCore.Functions.GetPlayer(source)
-
-	if xPlayer.PlayerData.money['cash'] >= price then
+	local src = source
+	local xPlayer = QBCore.Functions.GetPlayer(src)
+	if xPlayer.Functions.GetMoney('cash') >= price then
 		xPlayer.Functions.RemoveMoney('cash', price)
-		table.insert(tattooList, tattoo)
-
-		exports['ghmattimysql']:execute('UPDATE playerskins SET tattoos = @tattoos WHERE citizenid = @identifier', {
-			['@tattoos'] = json.encode(tattooList),
-			['@identifier'] = xPlayer.PlayerData.citizenid
+		tattooList[#tattooList + 1] = tattoo
+		exports.oxmysql:update('UPDATE players SET tattoos = ? WHERE citizenid = ?', {
+			json.encode(tattooList),
+			xPlayer.PlayerData.citizenid
 		})
-		TriggerClientEvent('QBCore:Notify', source, 'Purchased The '..tattooName.. ' Tattoo For $'..price, 'success')
+		TriggerClientEvent('QBCore:Notify', src, 'You bought the '..tattooName..' tattoo for $'..price)
 		cb(true)
 	else
-		TriggerClientEvent('QBCore:Notify', source, 'Not Enough Money', 'error')
+		TriggerClientEvent('QBCore:Notify', src, 'Not enough money', 'error')
 		cb(false)
 	end
 end)
@@ -41,9 +39,8 @@ end)
 RegisterServerEvent('SmallTattoos:RemoveTattoo')
 AddEventHandler('SmallTattoos:RemoveTattoo', function (tattooList)
 	local xPlayer = QBCore.Functions.GetPlayer(source)
-
-	exports['ghmattimysql']:execute('UPDATE playerskins SET tattoos = @tattoos WHERE citizenid = @identifier', {
-		['@tattoos'] = json.encode(tattooList),
-		['@identifier'] = xPlayer.PlayerData.citizenid
+	exports.oxmysql:update('UPDATE players SET tattoos = ? WHERE citizenid = ?', {
+		json.encode(tattooList),
+		xPlayer.PlayerData.citizenid
 	})
 end)
