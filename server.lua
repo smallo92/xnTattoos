@@ -1,10 +1,12 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
+-- Callbacks
+
 QBCore.Functions.CreateCallback('SmallTattoos:GetPlayerTattoos', function(source, cb)
 	local src = source
-	local xPlayer = QBCore.Functions.GetPlayer(src)
-	if xPlayer then
-		exports.oxmysql:execute('SELECT tattoos FROM players WHERE citizenid = ?', {
+	local Player = QBCore.Functions.GetPlayer(src)
+	if Player then
+		MySQL.query('SELECT tattoos FROM players WHERE citizenid = ?', {
 			xPlayer.PlayerData.citizenid
 		}, function(result)
 			if result[1].tattoos then
@@ -20,13 +22,13 @@ end)
 
 QBCore.Functions.CreateCallback('SmallTattoos:PurchaseTattoo', function(source, cb, tattooList, price, tattoo, tattooName)
 	local src = source
-	local xPlayer = QBCore.Functions.GetPlayer(src)
-	if xPlayer.Functions.GetMoney('cash') >= price then
-		xPlayer.Functions.RemoveMoney('cash', price)
+	local Player = QBCore.Functions.GetPlayer(src)
+	if Player.Functions.GetMoney('cash') >= price then
+		Player.Functions.RemoveMoney('cash', price)
 		tattooList[#tattooList + 1] = tattoo
-		exports.oxmysql:update('UPDATE players SET tattoos = ? WHERE citizenid = ?', {
+		MySQL.update('UPDATE players SET tattoos = ? WHERE citizenid = ?', {
 			json.encode(tattooList),
-			xPlayer.PlayerData.citizenid
+			Player.PlayerData.citizenid
 		})
 		TriggerClientEvent('QBCore:Notify', src, 'You bought the '..tattooName..' tattoo for $'..price)
 		cb(true)
@@ -36,11 +38,13 @@ QBCore.Functions.CreateCallback('SmallTattoos:PurchaseTattoo', function(source, 
 	end
 end)
 
-RegisterServerEvent('SmallTattoos:RemoveTattoo')
-AddEventHandler('SmallTattoos:RemoveTattoo', function (tattooList)
-	local xPlayer = QBCore.Functions.GetPlayer(source)
-	exports.oxmysql:update('UPDATE players SET tattoos = ? WHERE citizenid = ?', {
+-- Event
+
+RegisterNetEvent('SmallTattoos:RemoveTattoo', function (tattooList)
+	local src = source
+	local Player = QBCore.Functions.GetPlayer(src)
+	MySQL.update('UPDATE players SET tattoos = ? WHERE citizenid = ?', {
 		json.encode(tattooList),
-		xPlayer.PlayerData.citizenid
+		Player.PlayerData.citizenid
 	})
 end)
