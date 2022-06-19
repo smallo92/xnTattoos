@@ -1,5 +1,5 @@
-fx_version 'adamant'
-games { 'gta5' }
+fx_version 'bodacious'
+game 'gta5' 
 
 client_scripts {
 	'jaymenu.lua',
