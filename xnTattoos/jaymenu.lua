@@ -605,9 +605,9 @@ function JayMenu.CloseMenu()
             
             continuity = {}
 
-            Citizen.CreateThread(function()
+            CreateThread(function()
                 while IsDisabledControlPressed(0, 200) or IsDisabledControlJustReleased(0, 200) do
-                    Citizen.Wait(0)
+                    Wait(0)
                     DisableControlAction(0, 200, true)
                 end
             end)
